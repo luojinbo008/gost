@@ -1,0 +1,2 @@
+grpc-gen:
+	protoc --proto_path=./third_party --proto_path=. --go_out=. --plugin=protoc-gen-echo=../protoc-gen-echo/protoc-gen-echo --echo_out=.  --plugin=protoc-gen-option=../gost-gen-option/gost-gen-option --option_out=. helloworld.proto

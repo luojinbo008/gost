@@ -1,0 +1,16 @@
+		
+syntax = "proto3";
+
+package gost_options;
+option go_package = "github.com/luojinbo008/gost/cmd/gost-gen-option/options;gost_options";
+
+import "google/protobuf/descriptor.proto";
+
+
+message MapField {
+  map<string, string> options_description = 1;
+}
+
+extend google.protobuf.FieldOptions {
+   MapField gost_option = 50001;
+}

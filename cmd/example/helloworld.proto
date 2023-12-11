@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package helloworld;
+
+import "google/api/annotations.proto";
+import "gost_options.proto";
+option go_package = "./";
+
+// The helloworld service definition.
+service Helloworld {
+
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {
+    option (google.api.http) = {
+        get: "/helloworld/:name",
+    };
+  }
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1 [(gost_options.gost_option) = {
+    options_description: [{
+      key: "param",
+      value: "name",
+    }, {
+      key: "json",
+      value: "name,omitempty",
+    }]
+  }];
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+  int32 code = 2;
+}
+
