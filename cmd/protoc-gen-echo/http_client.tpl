@@ -13,7 +13,7 @@ import (
 {{$svrType := .ServiceType}}
 type {{.ServiceType}}HTTPClient interface {
 {{- range .MethodSets}}
-	{{.Name}}(ctx context.Context, req *{{.Request}}) (rsp *{{.Reply}}, err error)
+	{{.Name}}(ctx context.Context, req *Echo{{.Request}}) (rsp *Echo{{.Reply}}, err error)
 {{- end}}
 }
 
@@ -33,7 +33,7 @@ func (c *{{$svrType}}HTTPClientImpl) Reference() string {
 
 
 {{range .MethodSets}}
-func (c *{{$svrType}}HTTPClientImpl) {{.Name}}(ctx context.Context, in *{{.Request}}) (*{{.Reply}}, error) {
+func (c *{{$svrType}}HTTPClientImpl) {{.Name}}(ctx context.Context, in *Echo{{.Request}}) (*Echo{{.Reply}}, error) {
 	var out {{.Reply}}
 	pattern := runtime.Path(fmt.Sprintf("%s%s", c.host, "{{.Path}}"))
 
