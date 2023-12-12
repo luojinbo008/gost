@@ -34,7 +34,7 @@ func (c *{{$svrType}}HTTPClientImpl) Reference() string {
 
 {{range .MethodSets}}
 func (c *{{$svrType}}HTTPClientImpl) {{.Name}}(ctx context.Context, in *Echo{{.Request}}) (*Echo{{.Reply}}, error) {
-	var out {{.Reply}}
+	var out Echo{{.Reply}}
 	pattern := runtime.Path(fmt.Sprintf("%s%s", c.host, "{{.Path}}"))
 
 	res, err := c.Call(ctx, "GET", pattern, in)

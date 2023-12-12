@@ -31,7 +31,7 @@ func main() {
 				continue
 			}
 			generateRouter(gen, f, *omitempty, *omitemptyPrefix)
-			generateServer(gen, f, *omitempty, *omitemptyPrefix)
+			//generateServer(gen, f, *omitempty, *omitemptyPrefix)
 			generateClient(gen, f, *omitempty, *omitemptyPrefix)
 		}
 		return nil

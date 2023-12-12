@@ -5,28 +5,26 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/labstack/echo/v4"
 	"github.com/luojinbo008/gost/common"
 	"github.com/luojinbo008/gost/config"
 	"github.com/luojinbo008/gost/internal/protocol"
-	"github.com/luojinbo008/gost/log/logger"
 	"github.com/luojinbo008/gost/service"
 )
 
+// 具体业务实现接口
 type RestServer interface {
 
 	// Start rest server
 	Start(*http.Server)
 
 	// Deploy a http api
-	//Deploy(routeFunc func(c echo.Context) error)
+	// Deploy(routeFunc echo.HandlerFunc, middleFunc ...echo.MiddlewareFunc)
 
 	// Destroy rest server
 	// Destroy()
 }
 
 type GoRestfulServer struct {
-	srv *echo.Echo
 }
 
 func NewGoRestfulServer() *GoRestfulServer {
@@ -45,26 +43,21 @@ func (grs *GoRestfulServer) Start(url *common.URL) {
 		if len(providerServices) == 0 {
 			panic("provider service map is null")
 		}
-
 		registerService(providerServices, svr)
-		// err := grs.srv.StartServer(svr)
-		// if err != nil && err != http.ErrServerClosed {
-		// 	logger.Errorf("[Go Restful] http.server.Serve(addr{%s}) = err{%+v}", url.Location, err)
-		// }
 	}()
 }
 
-// registerService SetProxyImpl invoker and rest service
 func registerService(providerServices map[string]*config.ServiceConfig, server *http.Server) {
+
 	for key, providerService := range providerServices {
+		serviceKey := common.ServiceKey(providerService.Interface, providerService.Group, providerService.Version)
 		svr := service.GetProviderService(key)
-		logger.GetLogger().Info("%+v", svr)
+
 		ds, ok := svr.(RestServer)
+
 		if !ok {
 			panic("illegal service type registered")
 		}
-
-		serviceKey := common.ServiceKey(providerService.Interface, providerService.Group, providerService.Version)
 
 		exporter, _ := restProtocol.ExporterMap().Load(serviceKey)
 
@@ -76,12 +69,6 @@ func registerService(providerServices map[string]*config.ServiceConfig, server *
 			panic(fmt.Sprintf("no invoker found for servicekey: %v", serviceKey))
 		}
 
-		// ds.SetProxyImpl(invoker)
 		ds.Start(server)
-		//server.RegisterService(ds.ServiceDesc(), svr)
 	}
-}
-
-func (grs *GoRestfulServer) Deploy(routeFunc echo.HandlerFunc, middleFunc ...echo.MiddlewareFunc) {
-	grs.srv.Add("GET", "", routeFunc, middleFunc...)
 }

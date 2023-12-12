@@ -13,12 +13,12 @@ import (
 
 type HelloworldServer interface {
 	// Sends a greeting
-	SayHello(req *HttpHelloRequest, e echo.Context) (*HttpHelloReply, error) 
+	SayHello(req *EchoHelloRequest, e echo.Context) (*EchoHelloReply, error)
 }
 
 func RegisterHelloworldRouter(e *echo.Echo, s HelloworldServer) {
-	e.Any("/helloworld/:name", func (c echo.Context) error {
-		var req *HttpHelloRequest = new(HttpHelloRequest)
+	e.GET("/helloworld/:name", func(c echo.Context) error {
+		var req *EchoHelloRequest = new(EchoHelloRequest)
 		if err := c.Bind(req); err != nil {
 			return err
 		}
@@ -29,3 +29,4 @@ func RegisterHelloworldRouter(e *echo.Echo, s HelloworldServer) {
 		return c.JSON(http.StatusOK, reply)
 	})
 }
+

@@ -7,12 +7,9 @@ import (
 
 // 应用级配置
 type ApplicationConfig struct {
-	Name string `default:"gost.io" yaml:"name" json:"name,omitempty"`
-
-	Group string `yaml:"group" json:"group,omitempty"`
-
-	Version string `yaml:"version" json:"version,omitempty"`
-
+	Name        string `default:"gost.io" yaml:"name" json:"name,omitempty"`
+	Group       string `yaml:"group" json:"group,omitempty"`
+	Version     string `yaml:"version" json:"version,omitempty"`
 	Environment string `yaml:"environment" json:"environment,omitempty"`
 }
 

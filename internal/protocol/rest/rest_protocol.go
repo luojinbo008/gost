@@ -26,7 +26,7 @@ type RestProtocol struct {
 	serverLock sync.Mutex
 }
 
-func NewGRPCProtocol() *RestProtocol {
+func NewRestProtocol() *RestProtocol {
 	return &RestProtocol{
 		BaseProtocol: protocol.NewBaseProtocol(),
 		serverMap:    make(map[string]*GoRestfulServer),
@@ -36,7 +36,6 @@ func NewGRPCProtocol() *RestProtocol {
 func (rp *RestProtocol) Export(invoker protocol.Invoker) protocol.Exporter {
 	url := invoker.GetURL()
 	serviceKey := url.ServiceKey()
-
 	exporter := NewRestExporter(serviceKey, invoker, rp.ExporterMap())
 	rp.SetExporterMap(serviceKey, exporter)
 
@@ -92,7 +91,7 @@ func (rp *RestProtocol) Destroy() {
 // GetProtocol gets gRPC protocol, will create if null.
 func GetProtocol() protocol.Protocol {
 	if restProtocol == nil {
-		restProtocol = NewGRPCProtocol()
+		restProtocol = NewRestProtocol()
 	}
 	return restProtocol
 }

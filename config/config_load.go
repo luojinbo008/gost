@@ -1,9 +1,9 @@
 package config
 
 import (
+	"github.com/knadh/koanf"
 	"github.com/pkg/errors"
 
-	"github.com/knadh/koanf"
 	"github.com/luojinbo008/gost/common/constant"
 )
 

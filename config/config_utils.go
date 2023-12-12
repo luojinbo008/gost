@@ -28,7 +28,6 @@ func verify(s interface{}) error {
 func translateIds(registryIds []string) []string {
 	ids := make([]string, 0)
 	for _, id := range registryIds {
-
 		ids = append(ids, strings.Split(id, ",")...)
 	}
 	return removeDuplicateElement(ids)

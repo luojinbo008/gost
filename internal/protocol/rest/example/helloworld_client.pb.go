@@ -7,23 +7,23 @@
 package __
 
 import (
+	"io/ioutil"
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
-	"io/ioutil"
 	"net/http"
 	"net/url"
+	"fmt"
 
 	"github.com/luojinbo008/gost/cmd/runtime"
 )
 
 type HelloworldHTTPClient interface {
-	SayHello(ctx context.Context, req *HttpHelloRequest) (rsp *HttpHelloReply, err error)
+	SayHello(ctx context.Context, req *EchoHelloRequest) (rsp *EchoHelloReply, err error)
 }
 
 type HelloworldHTTPClientImpl struct {
-	cc *http.Client
+	cc   *http.Client
 	host string
 }
 
@@ -31,11 +31,14 @@ func NewHelloworldHTTPClient(client *http.Client, host string) HelloworldHTTPCli
 	return &HelloworldHTTPClientImpl{client, host}
 }
 
-func (c *HelloworldHTTPClientImpl) SayHello(ctx context.Context, in *HttpHelloRequest) (*HttpHelloReply, error) {
-	var out HttpHelloReply
+// Reference ...
+func (c *HelloworldHTTPClientImpl) Reference() string {
+	return "HelloworldHTTPClientImpl"
+}
 
+func (c *HelloworldHTTPClientImpl) SayHello(ctx context.Context, in *EchoHelloRequest) (*EchoHelloReply, error) {
+	var out EchoHelloReply
 	pattern := runtime.Path(fmt.Sprintf("%s%s", c.host, "/helloworld/:name"))
-
 
 	res, err := c.Call(ctx, "GET", pattern, in)
 	if err != nil {
@@ -49,15 +52,9 @@ func (c *HelloworldHTTPClientImpl) SayHello(ctx context.Context, in *HttpHelloRe
 	return &out, err
 }
 
-// Reference ...
-func (c *HelloworldHTTPClientImpl) Reference() string {
-	return "HelloworldHTTPClientImpl"
+func (c *HelloworldHTTPClientImpl) GetGostStub(cc *http.Client, host string) HelloworldHTTPClient {
+	return NewHelloworldHTTPClient(cc, host)
 }
-
-func (u *HelloworldHTTPClientImpl) GetGostStub(cc *http.Client,  host string) HelloworldHTTPClient {
-	return NewHelloworldHTTPClient(cc,  host)
-}
-
 
 func (c *HelloworldHTTPClientImpl) Call(ctx context.Context, method string, pattern runtime.Path, in interface{}) ([]byte, error) {
 	body, err := runtime.Values(pattern, in)

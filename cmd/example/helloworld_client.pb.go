@@ -19,7 +19,7 @@ import (
 )
 
 type HelloworldHTTPClient interface {
-	SayHello(ctx context.Context, req *HelloRequest) (rsp *HelloReply, err error)
+	SayHello(ctx context.Context, req *EchoHelloRequest) (rsp *EchoHelloReply, err error)
 }
 
 type HelloworldHTTPClientImpl struct {
@@ -36,8 +36,8 @@ func (c *HelloworldHTTPClientImpl) Reference() string {
 	return "HelloworldHTTPClientImpl"
 }
 
-func (c *HelloworldHTTPClientImpl) SayHello(ctx context.Context, in *HelloRequest) (*HelloReply, error) {
-	var out HelloReply
+func (c *HelloworldHTTPClientImpl) SayHello(ctx context.Context, in *EchoHelloRequest) (*EchoHelloReply, error) {
+	var out EchoHelloReply
 	pattern := runtime.Path(fmt.Sprintf("%s%s", c.host, "/helloworld/:name"))
 
 	res, err := c.Call(ctx, "GET", pattern, in)
